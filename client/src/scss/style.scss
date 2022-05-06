@@ -1,0 +1,45 @@
+form.modal-form{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 5px;
+  padding: 30px 15px;
+  background: #fff;
+  max-width: 100%;
+  width: 600px;
+  .close-button{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer;
+  }
+  .form-group{
+    margin-bottom: 15px;
+  }
+  label{
+    margin-bottom: 8px;
+  }
+  .required{
+    color: red;
+  }
+  .optional{
+    opacity: .4;
+  }
+  .validation{
+    color: red;
+  }
+}
+.bg-modal{
+  background: rgba(0,0,0,.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom:0;
+  right: 0;
+  z-index: 1;
+  display: block;
+  &.not-active{
+    display: none;
+  }
+}
