@@ -15,8 +15,13 @@ const Users = () => {
         setStatus(!status)
     }
     const setFuncData = (data) => {
-        setStatus(false)
-        setFunc(data);
+        if(data.type !== 'delete') {
+            setStatus(false)
+            setFunc(data);
+        }
+        if(data.type === 'delete'){
+            deleteData(data.id);
+        }
     }
 
     const getUsers = async () => {
@@ -56,7 +61,6 @@ const Users = () => {
             })
             getUsers();
             setStatus(true)
-            document.getElementById('name').value = '';
         } catch (err) {
             setValid({valid: false, message: JSON.parse(err.request.response).message})
         }
@@ -86,16 +90,26 @@ const Users = () => {
             setValid({valid: false, message: JSON.parse(err.request.response).message})
         }
     }
-
+    const deleteData = async (id) => {
+       try{
+           await axios({
+               url: `http://localhost:8080/api/users/delete/${id}`,
+               method: 'DELETE'
+           })
+           getUsers()
+       } catch (err) {
+           console.log(JSON.parse(err.request.response).message)
+       }
+    }
     const castFunction = () => {
         if (castFunc.type === 'create'){
             return createUser();
         }
         if (castFunc.type === 'edit'){
-
             return editUser();
         }
     }
+
     if (!usersData) {
         getUsers()
     }
@@ -104,8 +118,8 @@ const Users = () => {
     }
     return (
         <div>
-            <Modal groupsData={groupData.data.data} editData={castFunc}  setFuncData={setFuncData} updateGroup={updateGroup} customFunction={castFunction} error={validation} onChange={onChange} statusModal={modal}/>
-            <TableList setFuncData={setFuncData}  data={usersData ? usersData.data.data : 'There are no users. Please go and add some more'}/>
+            <Modal  textButton='Add User' groupsData={groupData.data.data} editData={castFunc}  setFuncData={setFuncData} updateGroup={updateGroup} customFunction={castFunction} error={validation} onChange={onChange} statusModal={modal}/>
+            <TableList  setFuncData={setFuncData}  data={usersData ? usersData.data.data : 'There are no users. Please go and add some more'}/>
         </div>
     )
 }
