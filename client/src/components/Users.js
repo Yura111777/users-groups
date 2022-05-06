@@ -10,6 +10,7 @@ const Users = () => {
     const [validation, setValid] = useState({valid: true, message: ''});
     const [castFunc, setFunc] = useState('create');
     const [modal, setStatus] = useState(true);
+    const [errorDeleteMessage, setErrorDeleteMessage] = useState({status: false, message: null});
     const onChange = (status) => {
         setValid(status)
         setStatus(!status)
@@ -97,6 +98,10 @@ const Users = () => {
                method: 'DELETE'
            })
            getUsers()
+           setErrorDeleteMessage( {status: true, message: 'User was deleted'})
+           setTimeout(() => {
+               setErrorDeleteMessage( {status: false, message: null})
+           },2000)
        } catch (err) {
            console.log(JSON.parse(err.request.response).message)
        }
@@ -118,6 +123,9 @@ const Users = () => {
     }
     return (
         <div>
+            <div className={`alert alert-success ${errorDeleteMessage.status ? 'd-block' : 'd-none'}`}>
+                {errorDeleteMessage.message}
+            </div>
             <Modal  textButton='Add User' groupsData={groupData.data.data} editData={castFunc}  setFuncData={setFuncData} updateGroup={updateGroup} customFunction={castFunction} error={validation} onChange={onChange} statusModal={modal}/>
             <TableList  setFuncData={setFuncData}  data={usersData ? usersData.data.data : 'There are no users. Please go and add some more'}/>
         </div>

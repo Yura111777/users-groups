@@ -74,9 +74,6 @@ const Groups = () => {
             setStatus(true)
         } catch (err) {
             setValid({valid: true, message: JSON.parse(err.request.response).message})
-            setTimeout(()=> {
-                setValid({valid: false, message: null})
-            }, 5000)
         }
     }
     const deleteData = async (id) => {
