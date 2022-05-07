@@ -1,5 +1,9 @@
 # Getting Started with Nodejs App
-
+### `Docker`
+or you can use Docker to run project use `docker-compose up` to run containers or `docker-compose down`  
+in Docker environment  
+You need setup Docker `https://docs.docker.com/get-docker/`
+after launch Docker - in terminal use `docker-compose up` to run containers or `docker-compose down`
 
 ### `npm install`
 in order to install the following npm package dependencies as specified in the `package.json`.
