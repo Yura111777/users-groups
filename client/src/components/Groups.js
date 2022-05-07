@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import {NavLink} from "react-router-dom";
+import React, {useState} from "react";
 import TableList from "./Table";
 import Modal from "./Modal";
 import {useLocalStorage} from "../hooks/useLocalStorage";
@@ -7,6 +6,8 @@ import axios from "axios";
 
 const Groups = () => {
     const [groupData, setGroups] = useLocalStorage('groups');
+    const [usersData, setUsers] = useLocalStorage('users');
+
     const [validation, setValid] = useState({valid: true, message: ''});
     const [castFunc, setFunc] = useState('create');
     const [errorDeleteMessage, setErrorDeleteMessage] = useState({status: false, message: null});
@@ -23,6 +24,17 @@ const Groups = () => {
         }
         if(data.type === 'delete'){
             deleteData(data.id);
+        }
+    }
+    const getUsers = async () => {
+        try {
+            const res = await axios({
+                url: 'http://localhost:8080/api/users',
+                method: 'GET'
+            })
+            setUsers(res)
+        } catch (err) {
+            console.log(err)
         }
     }
     const getGroups = async () => {
@@ -71,6 +83,7 @@ const Groups = () => {
                 }
             })
             getGroups();
+            getUsers();
             setStatus(true)
         } catch (err) {
             setValid({valid: true, message: JSON.parse(err.request.response).message})
@@ -79,12 +92,16 @@ const Groups = () => {
     const deleteData = async (id) => {
         try{
             await axios({
-                url: `http://localhost:8080/api/groups/delete/${id}`,
+                url: `http://localhost:${window.env.API_PORT}/api/groups/delete/${id}`,
                 method: 'DELETE'
             })
             getGroups();
+            setErrorDeleteMessage( {status: true, message: 'Goup was deleted successfully', class: 'alert-success'})
+            setTimeout(() => {
+                setErrorDeleteMessage( {status: false, message: null})
+            },2000)
         } catch (err) {
-            setErrorDeleteMessage( {status: true, message: JSON.parse(err.request.response).message})
+            setErrorDeleteMessage( {status: true, message: JSON.parse(err.request.response).message, class: 'alert-danger'})
             setTimeout(() => {
                 setErrorDeleteMessage( {status: false, message: null})
             },5000)
@@ -100,11 +117,11 @@ const Groups = () => {
     }
     return (
         <div>
-            <div className={`alert alert-danger ${errorDeleteMessage.status ? 'd-block' : 'd-none'}`}>
+            <div className={`alert ${errorDeleteMessage.class} ${errorDeleteMessage.status ? 'd-block' : 'd-none'}`}>
                 {errorDeleteMessage.message}
             </div>
             <Modal textButton='Add Group' groupsData={false} editData={castFunc}  setFuncData={setFuncData}  customFunction={castFunction} error={validation} onChange={onChange} statusModal={modal}/>
-            <TableList  setFuncData={setFuncData}  data={groupData ? groupData.data.data : 'There are no groups. Please go and add some more'}/>
+            <TableList  setFuncData={setFuncData}   data={groupData ? groupData.data.data : 'There are no groups. Please go and add some more'}/>
         </div>
     )
 }

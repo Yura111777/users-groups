@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import TableList from "./Table";
 import axios from 'axios';
 import {useLocalStorage} from "../hooks/useLocalStorage";
@@ -98,7 +98,7 @@ const Users = () => {
                method: 'DELETE'
            })
            getUsers()
-           setErrorDeleteMessage( {status: true, message: 'User was deleted'})
+           setErrorDeleteMessage( {status: true, message: 'User was deleted successfully'})
            setTimeout(() => {
                setErrorDeleteMessage( {status: false, message: null})
            },2000)
@@ -114,19 +114,21 @@ const Users = () => {
             return editUser();
         }
     }
+    useEffect(() => {
+        if (!usersData) {
+            getUsers()
+        }
+        if (!groupData) {
+            getGroups()
+        }
+    }, [usersData])
 
-    if (!usersData) {
-        getUsers()
-    }
-    if (!groupData) {
-        getGroups()
-    }
     return (
         <div>
             <div className={`alert alert-success ${errorDeleteMessage.status ? 'd-block' : 'd-none'}`}>
                 {errorDeleteMessage.message}
             </div>
-            <Modal  textButton='Add User' groupsData={groupData.data.data} editData={castFunc}  setFuncData={setFuncData} updateGroup={updateGroup} customFunction={castFunction} error={validation} onChange={onChange} statusModal={modal}/>
+            <Modal  textButton='Add User' groupsData={ groupData ?  groupData.data.data : 'There are no groups. Please go and add some more'} editData={castFunc}  setFuncData={setFuncData} updateGroup={updateGroup} customFunction={castFunction} error={validation} onChange={onChange} statusModal={modal}/>
             <TableList  setFuncData={setFuncData}  data={usersData ? usersData.data.data : 'There are no users. Please go and add some more'}/>
         </div>
     )

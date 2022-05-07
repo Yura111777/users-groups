@@ -17,35 +17,52 @@ const TableList = (props) => {
     }
     const tr = ()=> {
         if(props.data.users !== undefined){
-           return  props.data.users.map((el,i) => {
+            if(props.data.users.length){
+                return  props.data.users.map((el,i) => {
+                    return (
+                        <tr key={el._id}>
+                            <td>{i+1}</td>
+                            <td>{el.username}</td>
+                            <td>{el.group !== null ? el.group.name : ''}</td>
+                            <td className='text-end'>
+                                <button className='btn btn-primary mx-3' onClick={()=> editUser({id: el._id, name: el.username, group: el.group, type: 'edit'})} >Edit</button>
+                                <button className='btn btn-danger' onClick={()=> deleteData({id: el._id, type: 'delete'})} >Delete</button>
+                            </td>
+                        </tr>
+                    )
+                })
+            }  else {
                 return (
-                    <tr key={el._id}>
-                        <td>{i+1}</td>
-                        <td>{el.username}</td>
-                        <td>{el.group !== null ? el.group.name : ''}</td>
-                        <td className='text-end'>
-                            <button className='btn btn-primary mx-3' onClick={()=> editUser({id: el._id, name: el.username, group: el.group, type: 'edit'})} >Edit</button>
-                            <button className='btn btn-danger' onClick={()=> deleteData({id: el._id, type: 'delete'})} >Delete</button>
-                        </td>
+                    <tr>
+                        <td className='text-center' colSpan='3'>There are no users. Please go and add some more</td>
                     </tr>
                 )
-            })
+            }
         }
-        if(props.data.groups !== undefined){
-            return  props.data.groups.map((el,i) => {
+        if(props.data.groups !== undefined ){
+            if(props.data.groups.length){
+                return  props.data.groups.map((el,i) => {
+                    return (
+                        <tr key={el._id}>
+                            <td>{i+1}</td>
+                            <td>{el.name}</td>
+                            <td>{el.description}</td>
+                            <td className='text-end'>
+                                <button className='btn btn-primary mx-3' onClick={()=> editGroup({id: el._id, name: el.name, description: el.description, type: 'edit'})}>Edit</button>
+                                <button className='btn btn-danger' onClick={()=> deleteData({id: el._id, type: 'delete'})}>Delete</button>
+                            </td>
+                        </tr>
+                    )
+                })
+            } else {
                 return (
-                    <tr key={el._id}>
-                        <td>{i+1}</td>
-                        <td>{el.name}</td>
-                        <td>{el.description}</td>
-                        <td className='text-end'>
-                            <button className='btn btn-primary mx-3' onClick={()=> editGroup({id: el._id, name: el.name, description: el.description, type: 'edit'})}>Edit</button>
-                            <button className='btn btn-danger' onClick={()=> deleteData({id: el._id, type: 'delete'})}>Delete</button>
-                        </td>
+                    <tr>
+                        <td className='text-center' colSpan='3'>There are no groups. Please go and add some more</td>
                     </tr>
                 )
-            })
-        }else {
+            }
+
+        }  else {
             return (
                 <tr>
                     <td className='text-center' colSpan='3'>{props.data}</td>

@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 const Modal = (props) => {
     const [activeModal, setModal] = useState(props.statusModal)
     const [errorStatus, setStatus] = useState(props.error.valid)
-    const [editData, setEditData] = useState(props.editData)
     const option = () => {
         if(props.groupsData.groups !== undefined){
             return props.groupsData.groups.map(el => {
@@ -23,9 +22,7 @@ const Modal = (props) => {
             setModal(props.statusModal)
     }, [props.statusModal])
 
-    useEffect(() => {
-        setEditData(props.editData)
-    }, [props.editData])
+
 
     const submitForm = (e) => {
         e.preventDefault();
