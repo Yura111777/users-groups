@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### `npm install`
+in order to install the following npm package dependencies as specified in the `package.json`.
+
+### `.env`
+Set API_PORT  variable that your server is running 
+
 ## Available Scripts
 
 In the project directory, you can run:
